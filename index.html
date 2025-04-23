@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Juego de Laberinto</title>
+    <link rel="stylesheet" href="styles/main.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Juego de Laberinto</h1>            
+        </header>
+        
+        <main>
+            <div class="game-container">
+                <div class="game-area">
+                    <canvas id="gameCanvas"></canvas>
+                    
+                    <div class="controls">
+                        <button id="newMaze" class="btn primary">Nuevo Laberinto</button>
+                        <button id="showPaths" class="btn secondary">Mostrar Rutas</button>
+                    </div>
+                    
+                    <!-- Controles táctiles para móviles -->
+                    <div id="touchControls" class="touch-controls">
+                        <button id="upBtn" class="touch-btn"><i class="fas fa-arrow-up"></i></button>
+                        <div class="touch-row">
+                            <button id="leftBtn" class="touch-btn"><i class="fas fa-arrow-left"></i></button>
+                            <button id="downBtn" class="touch-btn"><i class="fas fa-arrow-down"></i></button>
+                            <button id="rightBtn" class="touch-btn"><i class="fas fa-arrow-right"></i></button>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Panel de rutas (inicialmente oculto) -->
+                <div id="routesPanel" class="routes-panel hidden">
+                    <div class="panel-header">
+                        <h2>Mejores Rutas</h2>
+                        <button id="closeRoutes" class="btn-close">×</button>
+                    </div>
+                    <div class="routes-content">
+                        <div class="route-card">
+                            <h3>Ruta 1 <span class="badge">Óptima</span></h3>
+                            <div class="route-info">
+                                <p>Longitud: <span id="route1-length">0</span> pasos</p>
+                                <p>Tiempo estimado: <span id="route1-time">0</span> seg</p>
+                            </div>
+                            <div class="route-visual" id="route1-visual" data-color="#FF6B6B"></div>
+                        </div>
+                        
+                        <div class="route-card">
+                            <h3>Ruta 2</h3>
+                            <div class="route-info">
+                                <p>Longitud: <span id="route2-length">0</span> pasos</p>
+                                <p>Tiempo estimado: <span id="route2-time">0</span> seg</p>
+                            </div>
+                            <div class="route-visual" id="route2-visual" data-color="#4ECDC4"></div>
+                        </div>
+                        
+                        <div class="route-card">
+                            <h3>Ruta 3</h3>
+                            <div class="route-info">
+                                <p>Longitud: <span id="route3-length">0</span> pasos</p>
+                                <p>Tiempo estimado: <span id="route3-time">0</span> seg</p>
+                            </div>
+                            <div class="route-visual" id="route3-visual" data-color="#45B7D1"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+        
+        <!-- Modal de Victoria -->
+        <div id="victoryModal" class="modal hidden">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h2><i class="fas fa-trophy"></i> ¡Victoria!</h2>
+                    <button id="closeVictory" class="btn-close">×</button>
+                </div>
+                <div class="modal-body">
+                    <div class="victory-stats">
+                        <div class="stat-item">
+                            <i class="fas fa-star"></i>
+                            <p>Puntuación: <span id="finalScore">0</span></p>
+                        </div>
+                        <div class="stat-item">
+                            <i class="fas fa-clock"></i>
+                            <p>Tiempo: <span id="finalTime">00:00</span></p>
+                        </div>
+                        <div class="stat-item">
+                            <i class="fas fa-shoe-prints"></i>
+                            <p>Movimientos: <span id="finalMoves">0</span></p>
+                        </div>
+                    </div>
+                    <div class="victory-message">
+                        <p>¡Has encontrado la salida del laberinto!</p>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button id="playAgain" class="btn primary">Jugar de nuevo</button>
+                </div>
+            </div>
+        </div>
+        
+        <footer>
+            <p>Desarrollado por Jhoan Castro Santacruz | 2025</p>
+        </footer>
+    </div>
+    
+    <!-- Efectos de sonido -->
+    <audio id="moveSound" preload="auto">
+        <source src="assets/sounds/move.mp3" type="audio/mpeg">
+    </audio>
+    <audio id="wallSound" preload="auto">
+        <source src="assets/sounds/wall.mp3" type="audio/mpeg">
+    </audio>
+    <audio id="victorySound" preload="auto">
+        <source src="assets/sounds/victory.mp3" type="audio/mpeg">
+    </audio>
+    
+    <!-- Scripts -->
+    <script type="module" src="scripts/main.js"></script>
+</body>
+</html>

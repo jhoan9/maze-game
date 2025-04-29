@@ -285,7 +285,7 @@ Eliminar algunas paredes adicionales
 Fin
 ```
 
-### Búsqueda de Caminos (BFS)
+### Búsqueda de Caminos (DFS)
 
 ```plaintext
 Inicio
@@ -334,8 +334,6 @@ Fin
 ```plaintext
 maze-game/
 ├── index.html                # Archivo HTML principal
-├── assets/
-│   └── sounds/               # Efectos de sonido
 ├── styles/                   # Archivos CSS organizados por componentes
 └── scripts/
     ├── main.js               # Punto de entrada de la aplicación
@@ -343,14 +341,13 @@ maze-game/
     │   ├── Cell.js           # Clase para las celdas del laberinto
     │   └── Player.js         # Clase para el jugador
     ├── utils/
-    │   └── PathFinder.js     # Algoritmo BFS para búsqueda de caminos
+    │   └── PathFinder.js     # Algoritmo DFS para búsqueda de caminos
     ├── controllers/          # Controladores
     │   ├── MazeController.js # Control del laberinto
     │   ├── PlayerController.js # Control del jugador
     │   └── UIController.js   # Control de la interfaz
     └── services/
-        ├── MazeGenerator.js  # Algoritmo DFS para generación de laberintos
-        └── AudioService.js   # Gestión de audio
+        └── MazeGenerator.js  # Algoritmo DFS para generación de laberintos
 ```
 
 ## Tecnologías Utilizadas
@@ -362,12 +359,164 @@ maze-game/
 - **ES6 Modules**: Organización modular del código
 
 
+# Algoritmos
+
+### BackTracking - DFS(Deep-First-Search) --> Algoritmo de Busqueda en profundidad
+
+
+
+# Referencias
+
+## Proyectos de Generación de Laberintos y Búsqueda de Rutas con JavaScript
+
+## 1. [MazeSolver](https://github.com/NMPoole/MazeSolver)
+
+Este proyecto permite experimentar con diferentes algoritmos de búsqueda de caminos mediante la visualización y animación de cómo distintos algoritmos buscan una ruta hacia un objetivo en una cuadrícula.
+
+### Características principales:
+
+- **Algoritmos de búsqueda implementados**:
+  - Búsqueda aleatoria
+  - Búsqueda en anchura (BFS)
+  - Búsqueda en profundidad (DFS)
+  - Algoritmo de Dijkstra
+  - A* (A estrella)
+  - Búsqueda codiciosa (Greedy Best-First Search)
+  - Búsqueda bidireccional codiciosa
+
+- **Algoritmos de generación de laberintos**:
+  - Generación aleatoria
+  - Generación horizontal
+  - Generación vertical
+  - Generación por división recursiva
+
+- **Interfaz de usuario**: Desarrollada con React.js para una experiencia interactiva.
+
+- **Demostración en vivo**: [Demo en vivo](https://NMPoole.github.io/MazeSolver/)
+
+## 2. [Pathfinding.js](https://qiao.github.io/PathFinding.js/visual/)
+
+Pathfinding.js es una biblioteca que permite crear laberintos y visualizar cómo diferentes algoritmos de búsqueda los resuelven.
+
+### Características principales:
+
+- **Interactividad**: Los usuarios pueden dibujar obstáculos en la cuadrícula y establecer puntos de inicio y fin.
+
+- **Algoritmos de búsqueda disponibles**:
+  - A*
+  - IDA*
+  - Dijkstra
+  - BFS
+  - DFS
+
+- **Opciones avanzadas**: Soporta pesos en las celdas, búsqueda bidireccional y restricciones en los movimientos.
+
+- **Visualización**: Animaciones claras que muestran el proceso de búsqueda en tiempo real.
+
+## 3. [Generación de Laberintos Aleatorios con JavaScript](https://cloudfour.com/thinks/generating-random-mazes-with-javascript/)
+
+Este artículo describe cómo generar laberintos aleatorios utilizando JavaScript y la API de Canvas.
+
+### Enfoque:
+
+- **Restricciones definidas**:
+  - Laberintos rectangulares.
+  - Un solo camino desde el borde izquierdo al derecho.
+  - Es posible visitar cada casilla del laberinto.
+
+- **Implementación**: Utiliza un enfoque basado en la creación de una tabla HTML y la manipulación de celdas para representar las paredes y caminos.
+
+- **Demostración interactiva**: Incluye un enlace a un CodePen donde se puede visualizar la generación de laberintos en tiempo real.
+
+## 4. [Generador de Laberintos con DFS en JavaScript](https://dstromberg.com/2013/07/tutorial-random-maze-generation-algorithm-in-javascript/)
+
+Este tutorial explica cómo implementar un generador de laberintos utilizando el algoritmo de búsqueda en profundidad (DFS) con retroceso recursivo.
+
+### Detalles técnicos:
+
+- **Representación**: Utiliza una matriz bidimensional donde cada celda tiene cuatro bordes que representan las paredes.
+
+- **Algoritmo**: El DFS recursivo elimina paredes entre celdas adyacentes para crear un camino desde el punto de inicio hasta el final.
+
+- **Características**:
+  - Cada laberinto generado es único y tiene una solución garantizada.
+  - La implementación es sencilla y adecuada para principiantes.
+
+## 5. [Generador de Laberintos con Algoritmos de Generación](https://joeiddon.github.io/projects/javascript/maze_generation.html)
+
+Este proyecto presenta una implementación de varios algoritmos de generación de laberintos en JavaScript.
+
+### Algoritmos implementados:
+
+- **Backtracker**: Utiliza DFS con retroceso recursivo para generar laberintos.
+
+- **Prim's Algorithm**: Un algoritmo basado en la expansión de árboles mínimos.
+
+- **Sidewinder**: Un algoritmo que crea laberintos con pasajes horizontales.
+
+- **Eller's Algorithm**: Un algoritmo que genera laberintos sin ciclos.
+
+- **Generación en 3D**: También se exploran técnicas para generar laberintos en tres dimensiones.
+
+- **Demostración en vivo**: Permite visualizar la generación de laberintos utilizando diferentes algoritmos.
+
+## 6. [Generador de Laberintos en GitHub](https://github.com/codebox/mazes)
+
+Este repositorio de GitHub ofrece un generador de laberintos en JavaScript con soporte para diferentes tipos de cuadrículas.
+
+### Características:
+
+- **Tipos de cuadrículas**:
+  - Cuadrada
+  - Triangular
+  - Hexagonal
+  - Circular
+
+- **Algoritmos de generación**:
+  - DFS
+  - BFS
+  - Prim's
+  - Eller’s
+  - Sidewinder
+
+- **Visualización**: Incluye una interfaz para navegar por el laberinto generado y ver la solución óptima.
+
+## 7. [Generador de Laberintos con DFS en YouTube](https://www.youtube.com/watch?v=nHjqkLV_Tp0)
+
+Este video tutorial muestra cómo crear un generador de laberintos utilizando el algoritmo DFS en JavaScript.
+
+### Contenido del video:
+
+- **Explicación paso a paso**: Detalla cómo implementar el algoritmo DFS para generar laberintos.
+
+- **Demostración práctica**: Muestra la creación de un laberinto en tiempo real y su visualización.
+
+- **Recomendado para**: Desarrolladores que deseen comprender la implementación del algoritmo DFS en la generación de laberintos.
+
+## 8. [Generador de Laberintos en YouTube](https://www.youtube.com/watch?v=EN733Aq4ynM)
+
+Este video presenta un generador de laberintos utilizando HTML, CSS y JavaScript.
+
+### Características:
+
+- **Interactividad**: Permite al usuario generar laberintos y navegar a través de ellos.
+
+- **Implementación**: Utiliza técnicas de manipulación del DOM y eventos para crear la experiencia interactiva.
+
+- **Enfoque educativo**: Ideal para aprender sobre la integración de tecnologías web en proyectos interactivos.
+
+## Conclusión
+
+Estos proyectos ofrecen una variedad de enfoques y técnicas para la generación de laberintos y la búsqueda de rutas en JavaScript. Desde implementaciones simples hasta soluciones más complejas con interfaces interactivas, cada uno proporciona una perspectiva única sobre cómo abordar estos problemas. Explorar estos recursos puede ser útil para desarrolladores interesados en algoritmos, juegos o visualizaciones interactivas.
+
+
+
 ## Instalación y Uso
 
 1. Clona este repositorio:
 
 ```plaintext
-git clone https://github.com/tu-usuario/maze-game.git
+git clone https://github.com/jhoan9/maze-game
 ```
 
 
@@ -381,14 +530,3 @@ O
 ```plaintext
 npx serve
 ```
-
-
-
-
-## Posibles Mejoras Futuras
-
-- Implementar algoritmos alternativos de generación de laberintos (Kruskal, Prim, etc.)
-- Añadir heurísticas al algoritmo de búsqueda (A* en lugar de BFS)
-- Crear laberintos con diferentes topologías (hexagonal, triangular)
-- Implementar laberintos con múltiples niveles o en 3D
-- Añadir obstáculos dinámicos y enemigos con algoritmos de pathfinding

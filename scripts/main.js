@@ -21,16 +21,6 @@ let grid = mazeController.generateNewMaze()
 const playerController = new PlayerController(cellSize, ctx, grid, cols, rows)
 playerController.resetPlayer()
 
-// Función para dibujar el juego
-function drawGame() {
-  mazeController.drawMaze()
-  playerController.drawPlayer()
-  requestAnimationFrame(drawGame)
-}
-
-// Iniciar bucle de dibujo
-drawGame()
-
 // Controlador de UI
 const uiController = new UIController(
   // Callback para nuevo laberinto
@@ -38,12 +28,17 @@ const uiController = new UIController(
     grid = mazeController.generateNewMaze()
     playerController.updateGrid(grid)
     playerController.resetPlayer()
+
+    // Limpiar las rutas visualizadas en el laberinto
+    mazeController.clearPaths()
   },
 
   // Callback para mostrar rutas
   () => {
     const pathFinder = new PathFinder(grid, cols, rows)
-    const paths = pathFinder.findDistinctPaths(0, 0, cols - 1, rows - 1)
+    // Usar la posición actual del jugador como punto de inicio
+    const playerPos = playerController.getPlayerPosition()
+    const paths = pathFinder.findDistinctPaths(playerPos.x, playerPos.y, cols - 1, rows - 1)
     mazeController.setPaths(paths)
     uiController.updateRoutesInfo(paths)
   },
@@ -58,17 +53,40 @@ const uiController = new UIController(
     grid = mazeController.generateNewMaze()
     playerController.updateGrid(grid)
     playerController.resetPlayer()
+
+    // Limpiar las rutas visualizadas en el laberinto
+    mazeController.clearPaths()
+
+    // Reiniciar información de rutas
+    uiController.resetRoutesInfo()
   },
 )
 
-// Verificar victoria
-setInterval(() => {
-  if (playerController.checkVictory()) {
-    const stats = {
-      score: playerController.calculateScore(),
-      time: playerController.getFormattedTime(),
-      moves: playerController.getMoveCount(),
+// Función para dibujar el juego
+function drawGame() {
+  mazeController.drawMaze()
+  playerController.drawPlayer()
+
+  // Verificar victoria en cada frame
+  if (playerController.isPlaying) {
+    const hasWon = playerController.checkVictory()
+    if (hasWon) {
+      console.log("Victoria detectada en main.js")
+      const stats = {
+        score: playerController.calculateScore(),
+        time: playerController.getFormattedTime(),
+        moves: playerController.getMoveCount(),
+      }
+
+      // Usar setTimeout para asegurar que el modal se muestre después de que se complete el frame actual
+      setTimeout(() => {
+        uiController.showVictoryModal(stats)
+      }, 100)
     }
-    uiController.showVictoryModal(stats)
   }
-}, 100)
+
+  requestAnimationFrame(drawGame)
+}
+
+// Iniciar bucle de dibujo
+drawGame()

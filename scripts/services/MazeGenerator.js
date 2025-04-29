@@ -21,21 +21,47 @@ export default class MazeGenerator {
   /**
    * Inicializa la matriz del laberinto
    */
-  initGrid() {
-    this.grid = []
+  initGrid(entry) {
+    this.grid = [];
     for (let y = 0; y < this.rows; y++) {
-      const row = []
+      const row = [];
       for (let x = 0; x < this.cols; x++) {
-        row.push(new Cell(x, y))
+        row.push(new Cell(x, y));
       }
-      this.grid.push(row)
+      this.grid.push(row);
     }
 
-    this.stack = []
-    this.current = this.grid[0][0]
-    this.current.visited = true
-    this.stack.push(this.current)
-    this.isGenerating = true
+    this.stack = [];
+    this.current = this.grid[entry.y][entry.x]; // Usamos la entrada para iniciar
+    this.current.visited = true;
+    this.stack.push(this.current);
+    this.isGenerating = true;
+
+    // Eliminar obstáculos alrededor de la entrada para crear múltiples rutas
+    this.openEntrancePaths(entry);
+  }
+
+  // Método para eliminar obstáculos alrededor de la entrada
+  openEntrancePaths(entry) {
+    const { x, y } = entry;
+
+    // Abrir las celdas alrededor de la entrada para crear caminos
+    if (x < this.cols - 1) {
+      this.grid[y][x].walls.right = false;
+      this.grid[y][x + 1].walls.left = false;
+    }
+    if (y > 0) {
+      this.grid[y][x].walls.top = false;
+      this.grid[y - 1][x].walls.bottom = false;
+    }
+    if (y < this.rows - 1) {
+      this.grid[y][x].walls.bottom = false;
+      this.grid[y + 1][x].walls.top = false;
+    }
+    if (x > 0) {
+      this.grid[y][x].walls.left = false;
+      this.grid[y][x - 1].walls.right = false;
+    }
   }
 
   /**
@@ -75,8 +101,8 @@ export default class MazeGenerator {
   /**
    * Genera el laberinto completo de una vez
    */
-  generateFullMaze() {
-    this.initGrid()
+  generateFullMaze(entry) {
+    this.initGrid(entry)
 
     while (this.isGenerating) {
       this.generateStep()

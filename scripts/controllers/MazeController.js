@@ -19,13 +19,14 @@ export default class MazeController {
     this.mazeGenerator = new MazeGenerator(cols, rows)
     this.grid = []
     this.paths = []
+    this.entry = { x: 0, y: Math.floor(rows / 2) };
   }
 
   /**
    * Genera un nuevo laberinto
    */
   generateNewMaze() {
-    this.grid = this.mazeGenerator.generateFullMaze()
+    this.grid = this.mazeGenerator.generateFullMaze(this.entry)
     this.paths = []
     return this.grid
   }
@@ -48,7 +49,7 @@ export default class MazeController {
 
     // Dibujar entrada y salida
     this.ctx.fillStyle = "green"
-    this.ctx.fillRect(1, 1, this.cellSize - 2, this.cellSize - 2)
+    this.ctx.fillRect(1, Math.floor(this.rows / 2) * this.cellSize + 1, this.cellSize - 2, this.cellSize - 2)
 
     this.ctx.fillStyle = "red"
     this.ctx.fillRect(
@@ -63,7 +64,7 @@ export default class MazeController {
    * Dibuja las rutas encontradas
    */
   drawPaths() {
-    const colors = ["#4CAF50", "#2196F3", "#F44336"]
+    const colors = ["#4CAF50", "#2196F3", "#FF5722"] // Verde, Azul, Naranja
 
     this.paths.forEach((path, index) => {
       if (index < colors.length) {

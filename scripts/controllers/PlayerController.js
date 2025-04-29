@@ -1,5 +1,4 @@
 import Player from "../models/Player.js"
-import AudioService from "../services/AudioService.js"
 
 /**
  * Controlador para el jugador
@@ -19,11 +18,13 @@ export default class PlayerController {
     this.grid = grid
     this.cols = cols
     this.rows = rows
-    this.player = new Player()
-    this.audioService = new AudioService()
+    // Inicializar jugador en la entrada del laberinto (normalmente en la posición 0, mitad de la altura)
+    const startY = Math.floor(rows / 2)
+    this.player = new Player(0, startY)
     this.startTime = null
     this.elapsedTime = 0
     this.isPlaying = false
+    this.hasWon = false // Nueva propiedad para evitar múltiples detecciones de victoria
 
     // Inicializar controles
     this.initControls()
@@ -55,48 +56,61 @@ export default class PlayerController {
       }
 
       if (moved) {
-        this.audioService.playMoveSound()
         this.checkVictory()
-      } else if (event.key.startsWith("Arrow")) {
-        this.audioService.playWallSound()
       }
     })
 
-    // Controles táctiles
-    document.getElementById("upBtn").addEventListener("click", () => {
-      if (this.isPlaying && this.movePlayer(0, -1)) {
-        this.audioService.playMoveSound()
-        this.checkVictory()
-      } else {
-        this.audioService.playWallSound()
-      }
-    })
+    // Controles táctiles mejorados
+    const touchControls = {
+      upBtn: document.getElementById("upBtn"),
+      rightBtn: document.getElementById("rightBtn"),
+      downBtn: document.getElementById("downBtn"),
+      leftBtn: document.getElementById("leftBtn"),
+    }
 
-    document.getElementById("rightBtn").addEventListener("click", () => {
-      if (this.isPlaying && this.movePlayer(1, 0)) {
-        this.audioService.playMoveSound()
-        this.checkVictory()
-      } else {
-        this.audioService.playWallSound()
-      }
-    })
+    // Función para manejar eventos táctiles
+    const handleTouchControl = (direction) => {
+      if (!this.isPlaying) return
 
-    document.getElementById("downBtn").addEventListener("click", () => {
-      if (this.isPlaying && this.movePlayer(0, 1)) {
-        this.audioService.playMoveSound()
-        this.checkVictory()
-      } else {
-        this.audioService.playWallSound()
-      }
-    })
+      let dx = 0,
+        dy = 0
 
-    document.getElementById("leftBtn").addEventListener("click", () => {
-      if (this.isPlaying && this.movePlayer(-1, 0)) {
-        this.audioService.playMoveSound()
-        this.checkVictory()
-      } else {
-        this.audioService.playWallSound()
+      switch (direction) {
+        case "up":
+          dy = -1
+          break
+        case "right":
+          dx = 1
+          break
+        case "down":
+          dy = 1
+          break
+        case "left":
+          dx = -1
+          break
       }
+
+      if (this.movePlayer(dx, dy)) {
+        this.checkVictory()
+      }
+    }
+
+    // Añadir eventos touch y click a cada botón
+    Object.entries(touchControls).forEach(([key, btn]) => {
+      if (!btn) return // Verificar que el botón existe
+
+      const direction = key.replace("Btn", "")
+
+      // Evento click (para navegadores de escritorio)
+      btn.addEventListener("click", (e) => {
+        handleTouchControl(direction)
+      })
+
+      // Evento touchstart (para dispositivos táctiles)
+      btn.addEventListener("touchstart", (e) => {
+        e.preventDefault() // Prevenir comportamiento por defecto
+        handleTouchControl(direction)
+      })
     })
   }
 
@@ -121,9 +135,12 @@ export default class PlayerController {
    * Reinicia al jugador
    */
   resetPlayer() {
-    this.player.reset()
+    // Reiniciar jugador en la entrada del laberinto (normalmente en la posición 0, mitad de la altura)
+    const startY = Math.floor(this.rows / 2)
+    this.player.reset(0, startY)
     this.startTime = Date.now()
     this.isPlaying = true
+    this.hasWon = false // Reiniciar estado de victoria
   }
 
   /**
@@ -139,10 +156,15 @@ export default class PlayerController {
    * @returns {boolean} - True si el jugador ha ganado
    */
   checkVictory() {
+    // Si ya ganó, no verificar de nuevo
+    if (this.hasWon) return false
+
+    // Verificar si el jugador está en la meta (esquina inferior derecha)
     if (this.player.x === this.cols - 1 && this.player.y === this.rows - 1) {
+      console.log("¡Victoria! Jugador llegó a la meta:", this.player.x, this.player.y)
       this.isPlaying = false
+      this.hasWon = true
       this.elapsedTime = Date.now() - this.startTime
-      this.audioService.playVictorySound()
       return true
     }
     return false
@@ -175,5 +197,16 @@ export default class PlayerController {
     const timeScore = Math.max(0, 10000 - this.elapsedTime)
     const moveScore = Math.max(0, 1000 - this.player.moveCount * 10)
     return Math.floor((timeScore + moveScore) / 100)
+  }
+
+  /**
+   * Obtiene la posición actual del jugador
+   * @returns {Object} - Coordenadas {x, y} del jugador
+   */
+  getPlayerPosition() {
+    return {
+      x: this.player.x,
+      y: this.player.y,
+    }
   }
 }

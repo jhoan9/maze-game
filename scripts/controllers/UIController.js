@@ -4,171 +4,147 @@
 export default class UIController {
   /**
    * Crea un nuevo controlador de UI
-   * @param {Function} onNewMaze - Callback para crear nuevo laberinto
-   * @param {Function} onShowPaths - Callback para mostrar rutas
-   * @param {Function} onHidePaths - Callback para ocultar rutas
-   * @param {Function} onPlayAgain - Callback para jugar de nuevo
    */
   constructor(onNewMaze, onShowPaths, onHidePaths, onPlayAgain) {
-    this.routesPanel = document.getElementById("routesPanel")
-    this.victoryModal = document.getElementById("victoryModal")
-
-    // Verificar que los elementos existen
-    if (!this.victoryModal) {
-      console.error("Error: No se encontró el elemento #victoryModal")
-    }
+    this.routesPanel = document.getElementById("routesPanel");
+    this.victoryModal = document.getElementById("victoryModal");
 
     // Botones
-    this.newMazeBtn = document.getElementById("newMaze")
-    this.showPathsBtn = document.getElementById("showPaths")
-    this.closeRoutesBtn = document.getElementById("closeRoutes")
-    this.closeVictoryBtn = document.getElementById("closeVictory")
-    this.playAgainBtn = document.getElementById("playAgain")
+    this.newMazeBtn = document.getElementById("newMaze");
+    this.showPathsBtn = document.getElementById("showPaths");
+    this.closeRoutesBtn = document.getElementById("closeRoutes");
+    this.closeVictoryBtn = document.getElementById("closeVictory");
+    this.playAgainBtn = document.getElementById("playAgain");
 
-    // Elementos de estadísticas
-    this.finalScoreEl = document.getElementById("finalScore")
-    this.finalTimeEl = document.getElementById("finalTime")
-    this.finalMovesEl = document.getElementById("finalMoves")
+    // Estadísticas victoria
+    this.finalScoreEl = document.getElementById("finalScore");
+    this.finalTimeEl = document.getElementById("finalTime");
+    this.finalMovesEl = document.getElementById("finalMoves");
 
-    // Elementos de rutas
+    // Rutas: longitud y tiempo
     this.routeLengthEls = [
       document.getElementById("route1-length"),
-      document.getElementById("route2-length"),
-      document.getElementById("route3-length"),
-    ]
-
+      document.getElementById("route2-length")
+    ];
     this.routeTimeEls = [
       document.getElementById("route1-time"),
-      document.getElementById("route2-time"),
-      document.getElementById("route3-time"),
-    ]
+      document.getElementById("route2-time")
+    ];
 
     // Callbacks
-    this.onNewMaze = onNewMaze
-    this.onShowPaths = onShowPaths
-    this.onHidePaths = onHidePaths
-    this.onPlayAgain = onPlayAgain
+    this.onNewMaze = onNewMaze;
+    this.onShowPaths = onShowPaths;
+    this.onHidePaths = onHidePaths;
+    this.onPlayAgain = onPlayAgain;
 
-    // Inicializar eventos
-    this.initEvents()
+    this.initEvents();
   }
 
-  /**
-   * Inicializa los eventos de la UI
-   */
   initEvents() {
     this.newMazeBtn.addEventListener("click", () => {
-      // Ocultar panel de rutas y reiniciar información
-      this.hideRoutesPanel()
-      this.resetRoutesInfo()
-
-      // Llamar al callback para generar nuevo laberinto
-      this.onNewMaze()
-    })
+      this.hideRoutesPanel();
+      this.clearRoutes();
+      this.onNewMaze();
+    });
 
     this.showPathsBtn.addEventListener("click", () => {
-      this.showRoutesPanel()
-      this.onShowPaths()
-    })
+      this.showRoutesPanel();
+      this.onShowPaths();
+    });
 
     this.closeRoutesBtn.addEventListener("click", () => {
-      this.hideRoutesPanel()
-      this.onHidePaths()
-    })
-
-    if (this.closeVictoryBtn) {
-      this.closeVictoryBtn.addEventListener("click", () => {
-        this.hideVictoryModal()
-      })
-    }
+      this.hideRoutesPanel();
+      this.onHidePaths();
+    });
 
     if (this.playAgainBtn) {
       this.playAgainBtn.addEventListener("click", () => {
-        this.hideVictoryModal()
-        this.onPlayAgain()
-      })
+        this.hideVictoryModal();
+        this.onPlayAgain();
+      });
     }
   }
 
-  /**
-   * Muestra el panel de rutas
-   */
   showRoutesPanel() {
-    this.routesPanel.classList.remove("hidden")
+    this.routesPanel.classList.remove("hidden");
   }
 
-  /**
-   * Oculta el panel de rutas
-   */
   hideRoutesPanel() {
-    this.routesPanel.classList.add("hidden")
+    this.routesPanel.classList.add("hidden");
   }
 
-  /**
-   * Reinicia la información de las rutas
-   */
-  resetRoutesInfo() {
-    // Reiniciar valores de longitud
-    this.routeLengthEls.forEach((el) => {
-      if (el) el.textContent = "0"
-    })
-
-    // Reiniciar valores de tiempo estimado
-    this.routeTimeEls.forEach((el) => {
-      if (el) el.textContent = "0"
-    })
+  clearRoutes() {
+    this.routeLengthEls.forEach(el => el.textContent = "0");
+    this.routeTimeEls.forEach(el => el.textContent = "0");
+    // limpiar canvases
+    [1,2].forEach(i => {
+      const canvas = document.querySelector(`#route${i}-visual canvas`);
+      if (canvas) {
+        const ctx = canvas.getContext('2d');
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+      }
+    });
   }
 
-  /**
-   * Muestra el modal de victoria
-   * @param {Object} stats - Estadísticas del juego
-   */
   showVictoryModal(stats) {
-    console.log("Mostrando modal de victoria con stats:", stats)
-
-    if (!this.victoryModal) {
-      console.error("Error: No se puede mostrar el modal de victoria porque no se encontró el elemento")
-      return
-    }
-
-    // Actualizar estadísticas
-    if (this.finalScoreEl) this.finalScoreEl.textContent = stats.score
-    if (this.finalTimeEl) this.finalTimeEl.textContent = stats.time
-    if (this.finalMovesEl) this.finalMovesEl.textContent = stats.moves
-
-    // Mostrar modal usando diferentes métodos para asegurar que funcione
-    this.victoryModal.classList.remove("hidden")
-    this.victoryModal.style.display = "flex"
-
-    console.log("Estado del modal después de intentar mostrarlo:", {
-      classList: this.victoryModal.classList,
-      display: this.victoryModal.style.display,
-      computedDisplay: window.getComputedStyle(this.victoryModal).display,
-    })
+    if (!this.victoryModal) return;
+    this.finalScoreEl.textContent = stats.score;
+    this.finalTimeEl.textContent = stats.time;
+    this.finalMovesEl.textContent = stats.moves;
+    this.victoryModal.classList.remove("hidden");
+    this.victoryModal.style.display = "flex";
   }
 
-  /**
-   * Oculta el modal de victoria
-   */
   hideVictoryModal() {
-    if (!this.victoryModal) return
-
-    this.victoryModal.classList.add("hidden")
-    this.victoryModal.style.display = "none"
+    if (!this.victoryModal) return;
+    this.victoryModal.classList.add("hidden");
+    this.victoryModal.style.display = "none";
   }
 
   /**
-   * Actualiza la información de las rutas
-   * @param {Array} paths - Rutas encontradas
+   * Actualiza y dibuja las dos mejores rutas.
+   * La ruta más corta siempre se pintará en verde (primera)
    */
   updateRoutesInfo(paths) {
-    paths.forEach((path, index) => {
-      if (index < this.routeLengthEls.length && this.routeLengthEls[index]) {
-        this.routeLengthEls[index].textContent = path.length
-        if (this.routeTimeEls[index]) {
-          this.routeTimeEls[index].textContent = Math.round(path.length * 0.5)
-        }
-      }
-    })
+    if (!paths || paths.length === 0) return;
+
+    // Ordenar rutas por longitud ascendente
+    const sorted = [...paths].sort((a,b) => a.length - b.length).slice(0, 2);
+
+    sorted.forEach((path, idx) => {
+      // textos
+      this.routeLengthEls[idx].textContent = path.length;
+      this.routeTimeEls[idx].textContent = Math.round(path.length * 0.5);
+
+      // clase de línea verde en el panel
+      const lineEl = document.querySelector(`.routes-header .route-line:nth-child(${idx+1}) p`);
+      lineEl.classList.toggle('route-green', idx===0);
+      lineEl.classList.toggle('route-blue', idx===1);
+
+      // dibujar en canvas
+      const canvas = document.querySelector(`#route${idx+1}-visual canvas`);
+      if (canvas) this.drawPath(canvas, path, idx===0 ? '#28a745' : '#007bff');
+    });
+  }
+
+  /**
+   * Dibuja la ruta en un canvas dado
+   */
+  drawPath(canvas, path, color) {
+    const ctx = canvas.getContext('2d');
+    ctx.clearRect(0,0,canvas.width, canvas.height);
+    ctx.strokeStyle = color;
+    ctx.lineWidth = 2;
+    ctx.beginPath();
+    // normalizar coordenadas al canvas
+    const maxX = Math.max(...path.map(p=>p.x));
+    const maxY = Math.max(...path.map(p=>p.y));
+    path.forEach((pt, i) => {
+      const x = (pt.x / maxX) * canvas.width;
+      const y = (pt.y / maxY) * canvas.height;
+      if (i===0) ctx.moveTo(x,y);
+      else ctx.lineTo(x,y);
+    });
+    ctx.stroke();
   }
 }

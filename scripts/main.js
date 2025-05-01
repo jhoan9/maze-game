@@ -38,7 +38,7 @@ const uiController = new UIController(
     const pathFinder = new PathFinder(grid, cols, rows)
     // Usar la posición actual del jugador como punto de inicio
     const playerPos = playerController.getPlayerPosition()
-    const paths = pathFinder.findDistinctPaths(playerPos.x, playerPos.y, cols - 1, rows - 1)
+    const paths = pathFinder.findDistinctPaths(playerPos.x, playerPos.y, cols - 1, rows - 1, 2)
     mazeController.setPaths(paths)
     uiController.updateRoutesInfo(paths)
   },

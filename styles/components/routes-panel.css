@@ -26,6 +26,27 @@
     font-size: 1.3rem;
     margin: 0;
   }
+
+  .routes-header {
+    padding: 15px 20px;
+  }
+  
+  .route-line {
+    margin-bottom: 10px;
+  }
+  
+  .hr-green {
+    border: none;
+    height: 4px;
+    background-color: green; 
+  }
+  
+  .hr-blue {
+    border: none;
+    height: 4px;
+    background-color: blue; 
+  }
+  
   
   .routes-content {
     padding: 20px;

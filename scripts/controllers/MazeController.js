@@ -64,8 +64,9 @@ export default class MazeController {
    * Dibuja las rutas encontradas
    */
   drawPaths() {
-    const colors = ["#4CAF50", "#2196F3", "#FF5722"] // Verde, Azul, Naranja
+    const colors = ["green", "blue"] // Verde, Azul, Naranja
 
+    
     this.paths.forEach((path, index) => {
       if (index < colors.length) {
         this.ctx.beginPath()

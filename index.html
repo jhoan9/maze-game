@@ -40,6 +40,17 @@
                         <h2>Mejores Rutas</h2>
                         <button id="closeRoutes" class="btn-close">×</button>
                     </div>
+                    
+                    <div class="routes-header">
+                        <div class="route-line">
+                            <p class="route-green">Mejor ruta :</p>
+                            <hr class="hr-green">
+                        </div>
+                        <div class="route-line">
+                            <p class="route-blue">2da mejor ruta:</p>
+                            <hr class="hr-blue">
+                        </div>
+                    </div>
                     <div class="routes-content">
                         <div class="route-card">
                             <h3>Ruta 1 <span class="badge">Óptima</span></h3>
@@ -47,7 +58,9 @@
                                 <p>Longitud: <span id="route1-length">0</span> pasos</p>
                                 <p>Tiempo estimado: <span id="route1-time">0</span> seg</p>
                             </div>
-                            <div class="route-visual" id="route1-visual" data-color="#FF6B6B"></div>
+                            <div class="route-visual" id="route1-visual" data-color="#FF6B6B">
+                                <canvas width="100" height="40"></canvas>
+                            </div>
                         </div>
                         
                         <div class="route-card">
@@ -56,17 +69,10 @@
                                 <p>Longitud: <span id="route2-length">0</span> pasos</p>
                                 <p>Tiempo estimado: <span id="route2-time">0</span> seg</p>
                             </div>
-                            <div class="route-visual" id="route2-visual" data-color="#4ECDC4"></div>
-                        </div>
-                        
-                        <div class="route-card">
-                            <h3>Ruta 3</h3>
-                            <div class="route-info">
-                                <p>Longitud: <span id="route3-length">0</span> pasos</p>
-                                <p>Tiempo estimado: <span id="route3-time">0</span> seg</p>
+                            <div class="route-visual" id="route2-visual" data-color="#4ECDC4">
+                                <canvas width="100" height="40"></canvas>
                             </div>
-                            <div class="route-visual" id="route3-visual" data-color="#45B7D1"></div>
-                        </div>
+                        </div>                       
                     </div>
                 </div>
             </div>

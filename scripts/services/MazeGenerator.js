@@ -116,7 +116,7 @@ export default class MazeGenerator {
    */
   finalizeMaze() {
     // Eliminar algunas paredes aleatorias para crear más caminos
-    this.removeRandomWalls(Math.floor((this.cols * this.rows) / 10))
+    this.removeRandomWalls(Math.floor((this.cols * this.rows) / 5))
 
     // Asegurar que haya caminos desde el inicio
     this.openExtraStartPaths()
